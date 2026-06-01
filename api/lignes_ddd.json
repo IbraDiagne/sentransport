@@ -93,4 +93,22 @@
       "Sandaga"
     ]
   }
+
+,
+{
+  "id": 7,
+  "numero": "26",
+  "depart": "Liberté 6",
+  "arrivee": "Gare Routière",
+  "arrets": 9,
+  "listeArrets": ["Liberté 6", "Liberté 5", "HLM", "Colobane", "Fann", "Medina", "Sandaga", "Petersen", "Gare Routière"]
+},
+{
+  "id": 8,
+  "numero": "42",
+  "depart": "Ngor",
+  "arrivee": "Plateau",
+  "arrets": 8,
+  "listeArrets": ["Ngor", "Almadies", "Ouest Foire", "Point E", "Fann", "Medina", "Grand Dakar", "Plateau"]
+}
 ]

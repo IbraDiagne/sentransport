@@ -5,6 +5,7 @@ import Recherche from './Recherche';
 import LigneBus from './LigneBus';
 import DetailLigne from './DetailLigne';
 import Footer from './Footer';
+import Carte from './Carte';
 
 function App() {
   const [recherche, setRecherche] = useState("");
@@ -14,7 +15,9 @@ function App() {
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState(null);
 
-  useEffect(() => {
+  function chargerLignes() {
+    setChargement(true);
+    setErreur(null);
     fetch("http://localhost:5000/lignes")
       .then(response => {
         if (!response.ok) {
@@ -30,6 +33,10 @@ function App() {
         setErreur(error.message);
         setChargement(false);
       });
+  }
+
+  useEffect(() => {
+    chargerLignes();
   }, []);
 
   const lignesFiltrees = lignes.filter(l =>
@@ -42,7 +49,9 @@ function App() {
     if (ligneSelectionnee && ligneSelectionnee.id === ligne.id) {
       setLigneSelectionnee(null);
     } else {
-      setLigneSelectionnee(ligne);
+      fetch(`http://localhost:5000/lignes/${ligne.id}`)
+        .then(response => response.json())
+        .then(data => setLigneSelectionnee(data));
     }
   }
 
@@ -83,6 +92,9 @@ function App() {
             setNbRecherches(n => n + 1);
           }}
         />
+        <button className="btn-recharger" onClick={chargerLignes}>
+          🔄 Recharger
+        </button>
         <p className="compteur-recherche">
           Vous avez effectué <strong>{nbRecherches}</strong> recherche{nbRecherches > 1 ? 's' : ''}
         </p>
@@ -106,6 +118,7 @@ function App() {
           />
         ))}
         {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
+        <Carte />
       </main>
       <Footer />
     </div>
