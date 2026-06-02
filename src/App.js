@@ -6,6 +6,8 @@ import LigneBus from './LigneBus';
 import DetailLigne from './DetailLigne';
 import Footer from './Footer';
 import Carte from './Carte';
+import Meteo from './Meteo';
+import SignalerIncident from './SignalerIncident';
 
 function App() {
   const [recherche, setRecherche] = useState("");
@@ -85,6 +87,7 @@ function App() {
     <div className="App">
       <Header />
       <main className="contenu">
+        <Meteo />
         <Recherche
           valeur={recherche}
           onChange={(val) => {
@@ -119,6 +122,7 @@ function App() {
         ))}
         {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
         <Carte />
+        <SignalerIncident />
       </main>
       <Footer />
     </div>
