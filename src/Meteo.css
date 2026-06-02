@@ -49,3 +49,44 @@
   font-family: monospace;
   font-size: 0.85rem;
 }
+
+.previsions {
+  margin-top: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+.previsions-titre {
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.previsions-liste {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.prevision-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-width: 100px;
+}
+.prevision-date {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+.prevision-icone { width: 35px; height: 35px; }
+.prevision-temp {
+  font-weight: bold;
+  color: #2c3e50;
+}
+.prevision-desc {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  text-align: center;
+  text-transform: capitalize;
+}

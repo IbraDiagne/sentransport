@@ -3,6 +3,7 @@ import './Meteo.css';
 
 function Meteo() {
   const [meteo, setMeteo] = useState(null);
+  const [previsions, setPrevisions] = useState([]);
   const [erreur, setErreur] = useState(null);
 
   useEffect(() => {
@@ -11,11 +12,9 @@ function Meteo() {
       setErreur("Cle API manquante (.env)");
       return;
     }
-    const url =
-      `https://api.openweathermap.org/data/2.5/weather`
-      + `?q=Dakar&appid=${API_KEY}`
-      + `&units=metric&lang=fr`;
-    fetch(url)
+
+    // Météo actuelle
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=Dakar&appid=${API_KEY}&units=metric&lang=fr`)
       .then(r => {
         if (!r.ok) throw new Error("Erreur : " + r.status);
         return r.json();
@@ -30,6 +29,29 @@ function Meteo() {
         });
       })
       .catch(err => setErreur(err.message));
+
+    // Prévisions 5 jours
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Dakar&appid=${API_KEY}&units=metric&lang=fr`)
+      .then(r => r.json())
+      .then(data => {
+        // On prend 1 entrée par jour (toutes les 24h = index 0, 8, 16...)
+        const jours = [];
+        const joursVus = new Set();
+        data.list.forEach(item => {
+          const date = item.dt_txt.split(" ")[0];
+          if (!joursVus.has(date) && jours.length < 3) {
+            joursVus.add(date);
+            jours.push({
+              date,
+              temp: Math.round(item.main.temp),
+              description: item.weather[0].description,
+              icone: item.weather[0].icon,
+            });
+          }
+        });
+        setPrevisions(jours);
+      })
+      .catch(err => console.error("Erreur prévisions :", err));
   }, []);
 
   function getAlerte(condition) {
@@ -74,6 +96,25 @@ function Meteo() {
       {alerte && (
         <div className={`meteo-alerte ${alerte.classe}`}>
           {alerte.message}
+        </div>
+      )}
+      {previsions.length > 0 && (
+        <div className="previsions">
+          <p className="previsions-titre">Prévisions 3 prochains jours :</p>
+          <div className="previsions-liste">
+            {previsions.map(j => (
+              <div key={j.date} className="prevision-item">
+                <span className="prevision-date">{j.date}</span>
+                <img
+                  src={`https://openweathermap.org/img/wn/${j.icone}.png`}
+                  alt={j.description}
+                  className="prevision-icone"
+                />
+                <span className="prevision-temp">{j.temp}°C</span>
+                <span className="prevision-desc">{j.description}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
